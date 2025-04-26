@@ -1,42 +1,56 @@
-console.log("hello world");
+// Get DOM elements
 
-const expenseForm = document.getElementById("expense-form");
-const expenseInput = document.getElementById("expense-input");
-const amountInput = document.getElementById("amount-input");
-const categoryInput = document.getElementById("category-input");
-const transactionList = document.getElementById("transaction-list");
-const totalExpense = document.getElementById("total-expense");
+const expenseDescriptionInput = document.getElementById("expense-description");
+const expenseAmountInput = document.getElementById("expense-amount");
+const expenseCategoryInput = document.getElementById("expense-category");
+
+const incomeDescriptionInput = document.getElementById("income-description");
+const incomeAmountInput = document.getElementById("income-amount");
+
+const transactionList = document.getElementById("transaction-history");
 const totalIncome = document.getElementById("total-income");
+const totalExpense = document.getElementById("total-expenses");
 const balance = document.getElementById("balance");
 
-expenseForm.addEventListener("submit", function (event) {
-  event.preventDefault();
-
-  const description = expenseInput.value.trim();
-  const amount = parseFloat(amountInput.value.trim());
-  const category = categoryInput.value;
+function addExpense() {
+  const description = expenseDescriptionInput.value.trim();
+  const amount = parseFloat(expenseAmountInput.value.trim());
+  const category = expenseCategoryInput.value;
 
   if (description === "" || isNaN(amount) || amount <= 0) {
     alert("Please enter a valid expense description and amount.");
     return;
   }
 
-  addTransaction(description, amount, category);
+  addTransaction(description, amount, category, "Expense");
+  clearExpenseInputs();
   updateSummary();
-  clearInputs();
-});
+}
 
-function addTransaction(description, amount, category) {
+function addIncome() {
+  const description = incomeDescriptionInput.value.trim();
+  const amount = parseFloat(incomeAmountInput.value.trim());
+
+  if (description === "" || isNaN(amount) || amount <= 0) {
+    alert("Please enter a valid income description and amount.");
+    return;
+  }
+
+  addTransaction(description, amount, "-", "Income");
+  clearIncomeInputs();
+  updateSummary();
+}
+
+function addTransaction(description, amount, category, type) {
   const transactionRow = document.createElement("tr");
 
   transactionRow.innerHTML = `
-            <td>${description}</td>
-            <td>${category}</td>
-            <td>${amount.toFixed(2)}</td>
-            <td><button class="delete-btn">Delete</button></td>
-            `;
-
-  transactionList.appendChild(transactionRow);
+    <td>${description}</td>
+    <td>${type === "Income" ? "-" : category}</td>
+    <td>${amount.toFixed(2)}</td>
+    <td>${type}</td>
+    <td><button class="delete-btn">Delete</button></td>
+    `;
 
   transactionRow
     .querySelector(".delete-btn")
@@ -44,32 +58,44 @@ function addTransaction(description, amount, category) {
       transactionRow.remove();
       updateSummary();
     });
+
+  transactionList.appendChild(transactionRow);
 }
 
 function updateSummary() {
-  let totalExpenses = 0;
-  let totalIncomes = 0;
+  let totalIncomeSummary = 0;
+  let totalExpensesSummary = 0;
 
-  const transactions = transactionList.querySelectorAll("tr");
+  const rows = transactionList.querySelectorAll("tr");
 
-  transactions.forEach(function (transaction) {
-    const amount = parseFloat(transaction.children[2].textContent);
-    const category = transaction.children[1].textContent;
+  rows.forEach((row) => {
+    const amount = parseFloat(row.children[2].textContent);
+    const type = row.children[3].textContent;
 
-    if (category === "Income") {
-      totalIncomes += amount;
+    if (type === "Income") {
+      totalIncomeSummary += amount;
     } else {
-      totalExpenses += amount;
+      totalExpensesSummary += amount;
     }
   });
 
-  totalExpense.textContent = totalExpenses.toFixed(2);
-  totalIncome.textContent = totalIncomes.toFixed(2);
-  balance.textContent = (totalIncomes - totalExpenses).toFixed(2);
+  totalIncome.textContent = totalIncomeSummary.toFixed(2);
+  totalExpense.textContent = totalExpensesSummary.toFixed(2);
+  balance.textContent = (totalIncomeSummary - totalExpensesSummary).toFixed(2);
 }
 
-function clearInputs() {
-  expenseInput.value = "";
-  amountInput.value = "";
-  categoryInput.value = "Expense";
+function clearExpenseInputs() {
+  expenseDescriptionInput.value = "";
+  expenseAmountInput.value = "";
+  expenseCategoryInput.value = "Housing";
+}
+
+function clearIncomeInputs() {
+  incomeDescriptionInput.value = "";
+  incomeAmountInput.value = "";
+}
+
+function clearAll() {
+  transactionList.innerHTML = "";
+  updateSummary();
 }
