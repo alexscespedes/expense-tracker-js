@@ -12,6 +12,7 @@ const totalIncome = document.getElementById("total-income");
 const totalExpense = document.getElementById("total-expenses");
 const balance = document.getElementById("balance");
 
+// eslint-disable-next-line no-unused-vars
 function addExpense() {
   const description = expenseDescriptionInput.value.trim();
   const amount = parseFloat(expenseAmountInput.value.trim());
@@ -27,6 +28,7 @@ function addExpense() {
   updateSummary();
 }
 
+// eslint-disable-next-line no-unused-vars
 function addIncome() {
   const description = incomeDescriptionInput.value.trim();
   const amount = parseFloat(incomeAmountInput.value.trim());
@@ -95,6 +97,7 @@ function clearIncomeInputs() {
   incomeAmountInput.value = "";
 }
 
+// eslint-disable-next-line no-unused-vars
 function clearAll() {
   transactionList.innerHTML = "";
   updateSummary();
