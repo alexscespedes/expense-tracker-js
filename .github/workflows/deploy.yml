@@ -2,17 +2,33 @@ name: Deploy Expense Tracker Project
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
-  deploy:
+  lint-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: checkout repo
+      - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Deploy to Github Pages
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run ESLint
+        run: npx eslint app.js
+
+      - name: Run HTMLHint
+        run: npx htmlhint index.html
+
+      - name: Run Stylelint
+        run: npx stylelint "style.css"
+
+      - name: Deploy if linting passes
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
