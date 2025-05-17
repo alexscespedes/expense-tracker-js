@@ -4,7 +4,8 @@
   "description": "Web project with HTML, CSS & JavaScript.",
   "main": "script.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "echo 'Static app - no build required'"
   },
   "keywords": [],
   "author": "",
