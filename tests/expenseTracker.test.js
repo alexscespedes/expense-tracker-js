@@ -4,7 +4,7 @@ const { addExpense, getExpenses } = require("../expenseTracker");
 describe("Expense Tracker", () => {
   test("adds a valid expense", () => {
     const result = addExpense("coffee", 3.5);
-    expect(result.description).toBe("coffee");
+    expect(result.description).toBe("Coffee");
     expect(result.amount).toBe(3.5);
     expect(getExpenses().length).toBeGreaterThan(0);
   });
